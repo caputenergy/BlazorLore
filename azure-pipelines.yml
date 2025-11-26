@@ -1,8 +1,3 @@
-# Docker
-
-# Build a Docker image
-# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
-
 pr:
   branches:
     include:
@@ -12,61 +7,13 @@ trigger:
   branches:
     include:
       - main
-      - staging
 
 resources:
   - repo: self
 
-# variables:
-#   # Container registry service connection established during pipeline creation
-#   dockerRegistryServiceConnection: "Caput ACR"
-#   imageRepository: "cap-fsharp-data-platform"
-#   containerRegistry: "caputenergy.azurecr.io"
-#   dockerfilePath: "$(Build.SourcesDirectory)/cicd/Dockerfile"
-#   buildId: "$(Build.BuildId)"
-#   sha: "$(Build.SourceVersion)"
-#   # no way of getting default branch name here so hardcode to main (used as var thereafter)
-#   ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
-#     versionTag: $[ format('{0}-{1}', variables['Build.BuildId'], variables['Build.SourceBranchName']) ]
-#   ${{ elseif eq(variables['Build.SourceBranch'], 'refs/heads/staging') }}:
-#     versionTag: $[ format('{0}-{1}', variables['Build.BuildId'], 'staging') ]
-#   ${{ else }}:
-#     versionTag: $[ format('{0}-{1}', variables['Build.BuildId'], 'dev') ]
-
 stages:
-  # - stage: PreBuild
-  #   displayName: Pre Build
-  #   jobs:
-  #     - job: CheckVars
-  #       displayName: Build metadata
-  #       steps:
-  #         # get a build id
-  #         - bash: |
-  #             echo Build.SourceBranchName = '$(Build.SourceBranchName)'
-  #             echo versionTag = '$(versionTag)'
-  #           displayName: Get build vars
-  #         # create metadata file
-  #         - bash: |
-  #             export OUTPUT_PATH=${1:-"$(Build.ArtifactStagingDirectory)/metadata/public"}
-  #             mkdir -p $OUTPUT_PATH
-  #             export VERSION_MANIFEST_FILE="${OUTPUT_PATH}/build.json"
-  #             echo "writing metadata blob to ${VERSION_MANIFEST_FILE}"
-  #             echo "{}" |
-  #               jq ".git_sha=\"$(Build.SourceVersion)\"" |
-  #               jq ".git_tag=\"$(versionTag)\"" |
-  #               jq ".git_branch=\"$(Build.SourceBranchName)\"" |
-  #               jq ".build_id=\"$(Build.BuildId)\"" |
-  #               jq ".build_pipeline=\"$(System.CollectionUri)$(System.TeamProject)/_build/results?buildId=$(Build.BuildId)\"" |
-  #               jq ".build_time_utc=\"$(date -u)\"" \
-  #               > "${VERSION_MANIFEST_FILE}"
-  #             cat $VERSION_MANIFEST_FILE
-  #           displayName: Generate build metadata
-  #         - publish: "$(Build.ArtifactStagingDirectory)/metadata"
-  #           displayName: "Publish build metadata"
-  #           artifact: metadata
-  - stage: BuildCapDataPlatform
-    displayName: Build Data Platform
-    dependsOn: PreBuild
+  - stage: BuildBlazorLore
+    displayName: Build BlazorLore
     jobs:
       - job: BuildDockerImage
         displayName: Build Docker image
@@ -80,69 +27,9 @@ stages:
           - task: UseDotNet@2
             inputs:
               packageType: 'sdk'
-              version: '8.x'
+              version: '9.x'
               installationPath: $(Agent.ToolsDirectory)/dotnet
             displayName: 'Install .NET SDK'
-          # - bash: |
-          #     dotnet tool restore
-          #     echo If this check fails, run \"dotnet fantomas src\" from the repository root and commit the changes.
-          #     echo See https://fsprojects.github.io/fantomas/docs for more information.
-          #     dotnet fantomas src --check
-          #     echo If this check fails, run \"dotnet csharpier .\" from the repository root and commit the changes.
-          #     echo See https://csharpier.com/docs/About for more information.
-          #     dotnet csharpier --check .
-          #   displayName: Check code formatting
-          # - download: current
-          #   artifact: metadata
-          #   displayName: Download metadata
-          # - bash: |
-          #     export ARTIFACT_PATH=${1:-"$(Agent.BuildDirectory)/metadata/public"}
-          #     export TARGET_PATH=${2:-"$(Build.SourcesDirectory)/src"}
-          #     echo $(ls $ARTIFACT_PATH)
-          #     cp -r $ARTIFACT_PATH $TARGET_PATH
-          #     echo $(ls $TARGET_PATH)
-          #   displayName: Embed Metadata
-          # - bash: |
-          #     docker build --target builder -f $DOCKERFILE $CONTEXT -t caputenergy.azurecr.io/$IMAGE:$SHA_TAG -t caputenergy.azurecr.io/$IMAGE:$VERSION_TAG
-          #     docker cp $(docker create --name tc caputenergy.azurecr.io/$IMAGE:$SHA_TAG):/app/output $(Build.SourcesDirectory)/output && docker rm tc
-          #   env:
-          #     IMAGE: $(imageRepository)
-          #     DOCKERFILE: $(dockerfilePath)
-          #     CONTEXT: "$(Build.SourcesDirectory)/src"
-          #     SHA_TAG: $(sha) 
-          #     VERSION_TAG: $(versionTag) 
-          #   displayName: Build Image and Run Tests
-          # - task: PublishTestResults@2
-          #   displayName: 'Publish Test Artifact'
-          #   condition: succeededOrFailed() 
-          #   inputs:
-          #     testResultsFormat: 'VSTest'
-          #     testResultsFiles: './output/test/vstest/testresults.trx'
-          #     failTaskOnFailedTests: true
-          # - bash: |
-          #     docker build -f $DOCKERFILE $CONTEXT -t caputenergy.azurecr.io/$IMAGE:$SHA_TAG -t caputenergy.azurecr.io/$IMAGE:$VERSION_TAG
-          #   env:
-          #     IMAGE: $(imageRepository)
-          #     DOCKERFILE: $(dockerfilePath)
-          #     CONTEXT: "$(Build.SourcesDirectory)/src"
-          #     SHA_TAG: $(sha) 
-          #     VERSION_TAG: $(versionTag) 
-          #   displayName: Build Image
-          # - task: Docker@2
-          #   displayName: Publish Image
-          #   inputs:
-          #     command: push
-          #     dockerfile: "$(dockerfilePath)"
-          #     buildContext: "$(Build.SourcesDirectory)/src"
-          #     repository: $(imageRepository)
-          #     containerRegistry: $(dockerRegistryServiceConnection)
-          #     tags: |
-          #       $(versionTag)
-          #       $(sha)
-          # - bash: |
-          #     image_tag="$(versionTag)"
-          #     echo "##vso[build.addbuildtag]$image_tag"
-          #   displayName: 'Apply image tag'
           - task: DotNetCoreCLI@2
             inputs:
               command: 'pack'
@@ -160,24 +47,3 @@ stages:
           #     dotnet nuget push $(Build.ArtifactStagingDirectory)/*.nupkg --source https://pkgs.dev.azure.com/caputenergy/caput-azure/_packaging/cap/nuget/v3/index.json --api-key AzureDevOps --skip-duplicate
           #   displayName: "Push to Azure DevOps NuGet Feed"
           #   condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
-           
-  # - stage: PostBuild
-  #   dependsOn: BuildCapDataPlatform
-  #   displayName: Post Build
-  #   condition: and(succeeded(),eq(variables['Build.SourceBranch'], 'refs/heads/main'))
-  #   jobs:
-  #     - job: CreateRelease
-  #       displayName: Create Release
-  #       steps:
-  #         - task: GitHubRelease@1
-  #           inputs:
-  #             gitHubConnection: "github.com_cap-energy"
-  #             repositoryName: "caputenergy/$(imageRepository)"
-  #             action: "create"
-  #             isPreRelease: true
-  #             target: "$(Build.SourceVersion)"
-  #             tagSource: "userSpecifiedTag"
-  #             tag: "$(versionTag)"
-  #             title: "Application Release $(versionTag)"
-  #             changeLogCompareToRelease: "lastFullRelease"
-  #             changeLogType: "commitBased"
