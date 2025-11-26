@@ -3,12 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36121.58
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BlazorLore.Scaffold", "BlazorLore.Scaffold", "{A1234567-1234-1234-1234-123456789ABC}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorLore.Scaffold.Cli", "BlazorLore.Scaffold\BlazorLore.Scaffold.Cli\BlazorLore.Scaffold.Cli.csproj", "{E34F386D-0303-4A84-95C9-D0D806082DC4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorLore.Scaffold.Cli.Tests", "BlazorLore.Scaffold\BlazorLore.Scaffold.Cli.Tests\BlazorLore.Scaffold.Cli.Tests.csproj", "{84E614E9-0AA1-477E-864E-1ADF85696C56}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorLore.Format.Cli", "BlazorLore.Format\BlazorLore.Format.Cli\BlazorLore.Format.Cli.csproj", "{E91FCFAB-6B67-938C-1DE6-03FD4C4BD81E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BlazorLore.Format", "BlazorLore.Format", "{E9D7F2FB-3087-1D17-C010-04EAF606B7A3}"
@@ -23,14 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E34F386D-0303-4A84-95C9-D0D806082DC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E34F386D-0303-4A84-95C9-D0D806082DC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E34F386D-0303-4A84-95C9-D0D806082DC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E34F386D-0303-4A84-95C9-D0D806082DC4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{84E614E9-0AA1-477E-864E-1ADF85696C56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{84E614E9-0AA1-477E-864E-1ADF85696C56}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{84E614E9-0AA1-477E-864E-1ADF85696C56}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{84E614E9-0AA1-477E-864E-1ADF85696C56}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E91FCFAB-6B67-938C-1DE6-03FD4C4BD81E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E91FCFAB-6B67-938C-1DE6-03FD4C4BD81E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E91FCFAB-6B67-938C-1DE6-03FD4C4BD81E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -48,8 +34,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{E34F386D-0303-4A84-95C9-D0D806082DC4} = {A1234567-1234-1234-1234-123456789ABC}
-		{84E614E9-0AA1-477E-864E-1ADF85696C56} = {A1234567-1234-1234-1234-123456789ABC}
 		{E91FCFAB-6B67-938C-1DE6-03FD4C4BD81E} = {E9D7F2FB-3087-1D17-C010-04EAF606B7A3}
 		{2F7C70F2-3FB0-0A7B-3E60-14B4ABD92267} = {E9D7F2FB-3087-1D17-C010-04EAF606B7A3}
 		{1FBB6D76-7AA8-0FE3-29C1-D9E7E924618D} = {E9D7F2FB-3087-1D17-C010-04EAF606B7A3}
