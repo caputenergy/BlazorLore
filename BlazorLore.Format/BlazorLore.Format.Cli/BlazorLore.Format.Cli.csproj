@@ -5,7 +5,7 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <AssemblyName>blazorfmt</AssemblyName>
+    <AssemblyName>blazorfmtcap</AssemblyName>
     <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
     <!-- AOT is only enabled when publishing with a runtime identifier, not when packing -->
     <PublishAot Condition="'$(RuntimeIdentifier)' != ''">true</PublishAot>
