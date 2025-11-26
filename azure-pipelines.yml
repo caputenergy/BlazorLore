@@ -12,11 +12,11 @@ resources:
   - repo: self
 
 stages:
-  - stage: BuildBlazorLore
-    displayName: Build BlazorLore
+  - stage: BlazorLore
+    displayName: Build, pack and push BlazorLore
     jobs:
-      - job: BuildDockerImage
-        displayName: Build Docker image
+      - job: BlazorLore
+        displayName: Build, pack and push BlazorLore
         pool:
           name: Azure Pipelines
         steps:
@@ -37,13 +37,13 @@ stages:
               includesymbols: true
               includesource: true
             displayName: "Pack NuGet packages"
-          # - task: NuGetToolInstaller@1
-          #   displayName: "Install NuGet"
-          #   condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
-          # - task: NuGetAuthenticate@1
-          #   displayName: "Authenticate to Azure DevOps NuGet feed"
-          #   condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
-          # - script: |
-          #     dotnet nuget push $(Build.ArtifactStagingDirectory)/*.nupkg --source https://pkgs.dev.azure.com/caputenergy/caput-azure/_packaging/cap/nuget/v3/index.json --api-key AzureDevOps --skip-duplicate
-          #   displayName: "Push to Azure DevOps NuGet Feed"
-          #   condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+          - task: NuGetToolInstaller@1
+            displayName: "Install NuGet"
+            condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+          - task: NuGetAuthenticate@1
+            displayName: "Authenticate to Azure DevOps NuGet feed"
+            condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+          - script: |
+              dotnet nuget push $(Build.ArtifactStagingDirectory)/*.nupkg --source https://pkgs.dev.azure.com/caputenergy/caput-azure/_packaging/cap/nuget/v3/index.json --api-key AzureDevOps --skip-duplicate
+            displayName: "Push to Azure DevOps NuGet Feed"
+            condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
