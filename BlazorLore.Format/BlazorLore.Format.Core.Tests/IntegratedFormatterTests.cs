@@ -37,6 +37,7 @@ public class IntegratedFormatterTests
     [InlineData("MixedContent.razor")]
     [InlineData("NestedQuotes.razor")]
     [InlineData("ForLoopTest.razor")]
+    [InlineData("BracketSyntax.razor")]
     public void Format_ShouldMatchExpectedOutput(string fileName)
     {
         // Arrange

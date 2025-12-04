@@ -538,6 +538,7 @@ public class SimpleRazorParser
                 var valueStart = position;
                 var parenDepth = 0;
                 var braceDepth = 0;
+                var bracketDepth = 0;
 
                 while (position < content.Length)
                 {
@@ -565,6 +566,14 @@ public class SimpleRazorParser
                     else if (ch == '}')
                     {
                         braceDepth--;
+                    }
+                    else if (ch == '[')
+                    {
+                        bracketDepth++;
+                    }
+                    else if (ch == ']')
+                    {
+                        bracketDepth--;
                     }
                     else if (ch == '$' && position + 1 < content.Length && 
                              (content[position + 1] == '"' || content[position + 1] == '\''))
@@ -602,7 +611,7 @@ public class SimpleRazorParser
                         }
                         continue;
                     }
-                    else if (ch == quoteChar && parenDepth == 0 && braceDepth == 0)
+                    else if (ch == quoteChar && parenDepth == 0 && braceDepth == 0 && bracketDepth == 0)
                     {
                         // Found closing quote at depth 0
                         break;
