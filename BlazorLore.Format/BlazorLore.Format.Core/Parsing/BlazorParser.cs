@@ -50,6 +50,7 @@ public class SimpleRazorParser
     private static readonly Regex AttributeRegex = new(@"(?<name>@?[\w-]+(?::\w+)?)\s*=\s*[""'](?<value>[^""']*)[""']|(?<boolname>@?[\w-]+(?::\w+)?)(?=\s|>|/>)", RegexOptions.IgnoreCase);
     private static readonly Regex CommentRegex = new(@"@\*(?<content>.*?)\*@", RegexOptions.Singleline);
     private static readonly Regex CodeBlockRegex = new(@"@\{(?<code>.*?)\}", RegexOptions.Singleline);
+    private static readonly Regex ParenthesizedExpressionRegex = new(@"@\((?<expr>(?:[^()""']|""[^""]*""|'[^']*'|\((?:[^()""']|""[^""]*""|'[^']*')*\))*)\)", RegexOptions.Singleline);
     private static readonly Regex ExpressionRegex = new(@"@(?!code\s*\{)(?<expr>[a-zA-Z_]\w*(?:\.\w+)*(?:\([^)]*\))?)", RegexOptions.Singleline);
     private static readonly Regex CodeDirectiveRegex = new(@"@code\s*\{(?<code>(?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*)\}", RegexOptions.Singleline);
     private static readonly Regex DirectiveRegex = new(@"@(?<directive>page|using|inject|inherits|layout|implements|rendermode|attribute)\s+(?<value>.*?)$", RegexOptions.Multiline);
@@ -150,6 +151,24 @@ public class SimpleRazorParser
 
             if (isRazor)
             {
+                // Check for parenthesized expression @(...) first
+                if (nextIndex + 1 < content.Length && content[nextIndex + 1] == '(')
+                {
+                    var (parenExpr, parenEnd) = ExtractParenthesizedExpression(content, nextIndex + 1);
+                    if (!string.IsNullOrEmpty(parenExpr))
+                    {
+                        nodes.Add(new CodeBlockNode
+                        {
+                            Code = $"({parenExpr})",  // Include parentheses in the code
+                            Type = CodeBlockType.Expression,
+                            StartPosition = nextIndex,
+                            EndPosition = parenEnd
+                        });
+                        position = parenEnd;
+                        continue;
+                    }
+                }
+                
                 // Handle Razor expressions
                 var commentMatch = CommentRegex.Match(content, nextIndex);
                 var codeBlockMatch = CodeBlockRegex.Match(content, nextIndex);
@@ -983,5 +1002,11 @@ public class SimpleRazorParser
         }
         
         return (string.Empty, openParenIndex);
+    }
+    
+    private (string expression, int endPosition) ExtractParenthesizedExpression(string content, int openParenIndex)
+    {
+        // Reuse ExtractCondition since the logic is identical
+        return ExtractCondition(content, openParenIndex);
     }
 }

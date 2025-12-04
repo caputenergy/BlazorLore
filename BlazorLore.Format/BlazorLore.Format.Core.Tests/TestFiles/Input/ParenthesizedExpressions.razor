@@ -1,0 +1,19 @@
+@page "/parenthesized-test"
+
+<h1>@(selectedSiteWithOrg?.OrgName ?? "Unknown Organization") - @(selectedSiteWithOrg?.SiteName ?? "Unknown Site")</h1>
+
+<div>
+    <p>Simple: @(userName)</p>
+    <p>With null coalescing: @(user?.Name ?? "Guest")</p>
+    <p>With ternary: @(isActive ? "Active" : "Inactive")</p>
+    <p>Complex: @(items?.Count() > 0 ? $"Found {items.Count()} items" : "No items")</p>
+</div>
+
+@code
+{
+    private object? selectedSiteWithOrg;
+    private string userName = "John";
+    private object? user;
+    private bool isActive = true;
+    private List<string>? items;
+}
