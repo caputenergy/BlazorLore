@@ -28,7 +28,9 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 9.0.x
+        dotnet-version: |
+          9.0.x
+          10.0.x
     
     - name: Restore dependencies
       run: dotnet restore BlazorLore.Scaffold/BlazorLore.Scaffold.Cli/BlazorLore.Scaffold.Cli.csproj
@@ -93,7 +95,9 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 9.0.x
+        dotnet-version: |
+          9.0.x
+          10.0.x
     
     - name: Check formatting
       run: |
